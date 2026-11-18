@@ -1,9 +1,9 @@
 const WHATSAPP_NUMBER = '2348039902723';
 
 const BANK_DETAILS = {
-  bankName: 'GTBank (Update with her bank)',
-  accountNumber: '0123456789',
-  accountName: 'Wumii Luxe'
+  bankName: 'Opay',
+  accountNumber: '8039902723',
+  accountName: 'Zainab Adewumi Adewuyi'
 };
 
 const products = [
@@ -12,64 +12,88 @@ const products = [
     name: 'Luxury Quilted Handbag',
     category: 'bags',
     categoryLabel: 'Bags',
-    price: 25000,
-    image: 'https://images.unsplash.com/photo-1584917865442-de89df76afd3?auto=format&fit=crop&w=600&q=80'
+    price: 10000,
+    image: '/assets/images/Short Bags.jpg'
   },
   {
     id: 2,
-    name: 'Crystal Embellished Abaya',
-    category: 'islamic',
-    categoryLabel: 'Islamic Wears',
-    price: 38000,
-    image: 'https://images.unsplash.com/photo-1583391733956-6c78276477e2?auto=format&fit=crop&w=600&q=80'
+    name: 'Luxury Tote Bag',
+    category: 'bags',
+    categoryLabel: 'Bags',
+    price: 7000,
+    image: '/assets/images/Tote Bag.jpg'
   },
   {
     id: 3,
-    name: 'Classic Tailored Blazer Set',
-    category: 'wears',
-    categoryLabel: 'Wears',
-    price: 32000,
-    image: 'https://images.unsplash.com/photo-1594633312681-425c7b97ccd1?auto=format&fit=crop&w=600&q=80'
+    name: 'Handbag',
+    category: 'bags',
+    categoryLabel: 'Bags',
+    price: 11000,
+    image: '/assets/images/Small Bag.jpg'
   },
   {
     id: 4,
     name: 'Gold Buckle Luxury Heels',
     category: 'shoes',
     categoryLabel: 'Shoes & Heels',
-    price: 28000,
-    image: 'https://images.unsplash.com/photo-1543163521-1bf539c55dd2?auto=format&fit=crop&w=600&q=80'
+    price: 11000,
+    image: '/assets/images/Hills.jpg'
   },
   {
     id: 5,
-    name: 'Royal Silk Jalamia',
-    category: 'islamic',
-    categoryLabel: 'Islamic Wears',
-    price: 30000,
-    image: 'https://images.unsplash.com/photo-1617137968427-85924c800a22?auto=format&fit=crop&w=600&q=80'
+    name: 'Basic Top',
+    category: 'wears',
+    categoryLabel: 'Wears',
+    price: 7000,
+    image: '/assets/images/Basic Top.jpg'
   },
   {
     id: 6,
-    name: 'Structured Tan Tote Bag',
-    category: 'bags',
-    categoryLabel: 'Bags',
-    price: 22000,
-    image: 'https://images.unsplash.com/photo-1591561954557-26941169b49e?auto=format&fit=crop&w=600&q=80'
+    name: 'Slide',
+    category: 'shoes',
+    categoryLabel: 'Shoes & Heels',
+    price: 7500,
+    image: '/assets/images/Slide.jpg'
   },
   {
     id: 7,
-    name: 'Chic Gold-Trimmed Slides',
+    name: 'Slippers',
     category: 'shoes',
     categoryLabel: 'Shoes & Heels',
     price: 16500,
-    image: 'https://images.unsplash.com/photo-1603487742131-4160ec999306?auto=format&fit=crop&w=600&q=80'
+    image: '/assets/images/Chewgum Slippers.jpg'
   },
   {
     id: 8,
-    name: 'Premium Chiffon Scarf & Pin Set',
+    name: 'Luxury Hijab',
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
-    price: 12000,
-    image: 'https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&w=600&q=80'
+    price: 7000,
+    image: '/assets/images/Hijab.jpg'
+  },
+  {
+    id: 8,
+    name: 'Luxury Jalamia',
+    category: 'islamic',
+    categoryLabel: 'Islamic Wears',
+    price: 15000,
+    image: '/assets/images/Jalamia.jpg'
+  },
+  {
+    id: 8,
+    name: 'Women Jalamia',
+    category: 'islamic',
+    categoryLabel: 'Islamic Wears',
+    price: 15000,
+    image: '/assets/images/Ladies Jalamia.jpg'
+  },
+  {
+    id: 8,
+    name: 'Luxury Abaya',
+    category: 'islamic',
+    categoryLabel: 'Islamic Wears',
+    price: 35000,
+    image: '/assets/images/Abaya.jpg'
   }
 ];
 
