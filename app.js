@@ -13,7 +13,9 @@ const products = [
     category: 'bags',
     categoryLabel: 'Bags',
     price: 10000,
+    inStock: true,
     colors: ['Black', 'Cream', 'Brown'],
+    description: 'Structured quilted finish with polished gold-tone hardware and an adjustable strap for effortless day-to-evening elegance.',
     image: './assets/images/Short Bags.jpg'
   },
   {
@@ -22,7 +24,9 @@ const products = [
     category: 'bags',
     categoryLabel: 'Bags',
     price: 7000,
+    inStock: true,
     colors: ['Black', 'Tan', 'Cream'],
+    description: 'Spacious, durable, and refined—designed to carry your daily essentials in timeless Wumii Luxe style.',
     image: './assets/images/Tote Bag.jpg'
   },
   {
@@ -31,7 +35,9 @@ const products = [
     category: 'bags',
     categoryLabel: 'Bags',
     price: 11000,
+    inStock: true,
     colors: ['Black', 'White', 'Nude'],
+    description: 'Sleek top-handle silhouette crafted for occasions that demand a clean, elevated statement piece.',
     image: './assets/images/Small Bag.jpg'
   },
   {
@@ -40,8 +46,10 @@ const products = [
     category: 'shoes',
     categoryLabel: 'Shoes & Heels',
     price: 11000,
+    inStock: true,
     sizes: ['37', '38', '39', '40', '41', '42'],
     colors: ['Black', 'Nude', 'Gold'],
+    description: 'Balanced mid-high heel accented with a signature gold buckle for all-day comfort and poised sophistication.',
     image: './assets/images/Hills.jpg'
   },
   {
@@ -50,8 +58,10 @@ const products = [
     category: 'wears',
     categoryLabel: 'Wears',
     price: 7000,
+    inStock: true,
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['Black', 'White', 'Beige'],
+    description: 'Soft, breathable everyday essential tailored for a flattering fit on its own or layered under jackets.',
     image: './assets/images/Basic Top.jpg'
   },
   {
@@ -60,8 +70,10 @@ const products = [
     category: 'shoes',
     categoryLabel: 'Shoes & Heels',
     price: 7500,
+    inStock: true,
     sizes: ['37', '38', '39', '40', '41', '42'],
     colors: ['Black', 'Brown', 'White'],
+    description: 'Minimalist slip-on slide with cushioned sole support—built for effortless errands and casual luxury outings.',
     image: './assets/images/Slide.jpg'
   },
   {
@@ -70,8 +82,10 @@ const products = [
     category: 'shoes',
     categoryLabel: 'Shoes & Heels',
     price: 16500,
+    inStock: true,
     sizes: ['37', '38', '39', '40', '41', '42'],
     colors: ['Black', 'Nude', 'Brown'],
+    description: 'Plush, statement-sole designer slippers combining high-fashion comfort with standout street appeal.',
     image: './assets/images/Chewgum Slippers.jpg'
   },
   {
@@ -80,7 +94,9 @@ const products = [
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
     price: 7000,
+    inStock: true,
     colors: ['Black', 'Nude', 'Cream', 'Dusty Rose'],
+    description: 'Lightweight, non-slip premium drape that stays neatly in place while offering breathable all-day modesty.',
     image: './assets/images/Hijab.jpg'
   },
   {
@@ -89,8 +105,10 @@ const products = [
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
     price: 15000,
+    inStock: true,
     sizes: ['M', 'L', 'XL', 'XXL'],
     colors: ['Black', 'Navy Blue', 'Olive'],
+    description: 'Regal full-length jalamia crafted from rich, flowing fabric with subtle detailing for Jummah, Eid, and special gatherings.',
     image: './assets/images/Jalamia.jpg'
   },
   {
@@ -99,8 +117,10 @@ const products = [
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
     price: 15000,
+    inStock: true,
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['Black', 'Brown', 'Champagne'],
+    description: 'Gracefully tailored women’s jalamia offering relaxed elegance, fluid movement, and refined modest coverage.',
     image: './assets/images/Ladies Jalamia.jpg'
   },
   {
@@ -109,18 +129,25 @@ const products = [
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
     price: 35000,
+    inStock: true,
     sizes: ['S', 'M', 'L', 'XL'],
     colors: ['Black', 'Emerald', 'Champagne'],
+    description: 'Signature couture-inspired abaya with opulent drape and bespoke finishing for unforgettable luxury occasions.',
     image: './assets/images/Abaya.jpg'
   }
 ];
 
 let cart = [];
+let activeCategory = 'all';
+let searchQuery = '';
+let activeQuickViewProduct = null;
 
 const menuToggle = document.getElementById('menuToggle');
 const navLinks = document.getElementById('navLinks');
 const productGrid = document.getElementById('productGrid');
 const filterBtns = document.querySelectorAll('.filter-btn');
+const searchInput = document.getElementById('searchInput');
+const clearSearchBtn = document.getElementById('clearSearchBtn');
 const overlay = document.getElementById('overlay');
 const bagDrawer = document.getElementById('bagDrawer');
 const openBagBtn = document.getElementById('openBagBtn');
@@ -134,6 +161,17 @@ const closeCheckoutBtn = document.getElementById('closeCheckoutBtn');
 const checkoutForm = document.getElementById('checkoutForm');
 const modalTotal = document.getElementById('modalTotal');
 const copyAcctBtn = document.getElementById('copyAcctBtn');
+
+const quickViewModal = document.getElementById('quickViewModal');
+const closeQuickViewBtn = document.getElementById('closeQuickViewBtn');
+const qvCategory = document.getElementById('qvCategory');
+const qvImage = document.getElementById('qvImage');
+const qvName = document.getElementById('qvName');
+const qvPrice = document.getElementById('qvPrice');
+const qvDesc = document.getElementById('qvDesc');
+const qvVariants = document.getElementById('qvVariants');
+const qvAddBagBtn = document.getElementById('qvAddBagBtn');
+const qvWhatsAppBtn = document.getElementById('qvWhatsAppBtn');
 
 document.getElementById('bankNameDisplay').textContent = BANK_DETAILS.bankName;
 document.getElementById('acctNumberDisplay').textContent = BANK_DETAILS.accountNumber;
@@ -153,20 +191,20 @@ function formatNaira(amount) {
   return '₦' + amount.toLocaleString('en-NG');
 }
 
-function getSelectedVariantText(productId) {
-  const sizeEl = document.getElementById(`size-${productId}`);
-  const colorEl = document.getElementById(`color-${productId}`);
+function getSelectedVariantText(productId, prefix = '') {
+  const sizeEl = document.getElementById(`${prefix}size-${productId}`);
+  const colorEl = document.getElementById(`${prefix}color-${productId}`);
   const parts = [];
   if (sizeEl) parts.push(`Size: ${sizeEl.value}`);
   if (colorEl) parts.push(`Color: ${colorEl.value}`);
   return parts.join(', ');
 }
 
-function orderDirectWhatsApp(productId) {
+function orderDirectWhatsApp(productId, prefix = '') {
   const product = products.find(p => p.id === productId);
-  if (!product) return;
+  if (!product || product.inStock === false) return;
 
-  const variantText = getSelectedVariantText(productId);
+  const variantText = getSelectedVariantText(productId, prefix);
   const variantLabel = variantText ? ` [${variantText}]` : '';
   const waText = encodeURIComponent(
     `Hello Wumii Luxe! I would like to order:\n• ${product.name}${variantLabel} (${formatNaira(product.price)})`
@@ -174,43 +212,109 @@ function orderDirectWhatsApp(productId) {
   window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`, '_blank', 'noopener');
 }
 
-function renderProducts(filterCategory = 'all') {
-  const filtered = filterCategory === 'all'
-    ? products
-    : products.filter(item => item.category === filterCategory);
+function buildVariantControls(product, prefix = '') {
+  if (product.inStock === false) return '';
+
+  const hasSizes = Array.isArray(product.sizes) && product.sizes.length > 0;
+  const hasColors = Array.isArray(product.colors) && product.colors.length > 0;
+
+  if (!hasSizes && !hasColors) return '';
+
+  return `<div class="product-variants">
+    ${hasSizes ? `
+      <select id="${prefix}size-${product.id}" class="variant-select" aria-label="Select Size">
+        ${product.sizes.map(s => `<option value="${s}">Size: ${s}</option>`).join('')}
+      </select>
+    ` : ''}
+    ${hasColors ? `
+      <select id="${prefix}color-${product.id}" class="variant-select" aria-label="Select Color">
+        ${product.colors.map(c => `<option value="${c}">${c}</option>`).join('')}
+      </select>
+    ` : ''}
+  </div>`;
+}
+
+function openQuickView(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+
+  const available = product.inStock !== false;
+  activeQuickViewProduct = product;
+  qvCategory.textContent = product.categoryLabel;
+  qvImage.src = product.image;
+  qvImage.alt = product.name;
+  qvName.textContent = product.name;
+  qvPrice.textContent = available ? formatNaira(product.price) : `${formatNaira(product.price)} • Sold Out`;
+  qvDesc.textContent = product.description || '';
+  qvVariants.innerHTML = buildVariantControls(product, 'qv-');
+
+  qvAddBagBtn.disabled = !available;
+  qvWhatsAppBtn.disabled = !available;
+  qvAddBagBtn.textContent = available ? 'Add to Bag' : 'Sold Out';
+
+  if (available) {
+    const cardSize = document.getElementById(`size-${product.id}`);
+    const cardColor = document.getElementById(`color-${product.id}`);
+    const qvSize = document.getElementById(`qv-size-${product.id}`);
+    const qvColor = document.getElementById(`qv-color-${product.id}`);
+
+    if (cardSize && qvSize) qvSize.value = cardSize.value;
+    if (cardColor && qvColor) qvColor.value = cardColor.value;
+  }
+
+  quickViewModal.classList.add('open');
+  overlay.classList.add('active');
+}
+
+qvAddBagBtn.addEventListener('click', () => {
+  if (!activeQuickViewProduct || activeQuickViewProduct.inStock === false) return;
+  addToBag(activeQuickViewProduct.id, 'qv-');
+});
+
+qvWhatsAppBtn.addEventListener('click', () => {
+  if (!activeQuickViewProduct || activeQuickViewProduct.inStock === false) return;
+  orderDirectWhatsApp(activeQuickViewProduct.id, 'qv-');
+});
+
+closeQuickViewBtn.addEventListener('click', closeAllModals);
+
+function renderProducts() {
+  const query = searchQuery.toLowerCase().trim();
+
+  const filtered = products.filter(item => {
+    const matchesCategory = activeCategory === 'all' || item.category === activeCategory;
+    const matchesSearch =
+      !query ||
+      item.name.toLowerCase().includes(query) ||
+      item.categoryLabel.toLowerCase().includes(query);
+    return matchesCategory && matchesSearch;
+  });
+
+  if (filtered.length === 0) {
+    productGrid.innerHTML = `<p class="no-results">No items found matching "${searchQuery}". Try another keyword or select "All".</p>`;
+    return;
+  }
 
   productGrid.innerHTML = filtered.map(product => {
-    const hasSizes = Array.isArray(product.sizes) && product.sizes.length > 0;
-    const hasColors = Array.isArray(product.colors) && product.colors.length > 0;
-
-    const variantControls = (hasSizes || hasColors)
-      ? `<div class="product-variants">
-          ${hasSizes ? `
-            <select id="size-${product.id}" class="variant-select" aria-label="Select Size">
-              ${product.sizes.map(s => `<option value="${s}">Size: ${s}</option>`).join('')}
-            </select>
-          ` : ''}
-          ${hasColors ? `
-            <select id="color-${product.id}" class="variant-select" aria-label="Select Color">
-              ${product.colors.map(c => `<option value="${c}">${c}</option>`).join('')}
-            </select>
-          ` : ''}
-        </div>`
-      : '';
+    const available = product.inStock !== false;
 
     return `
-      <div class="product-card">
-        <div class="product-img-wrap">
+      <div class="product-card ${available ? '' : 'sold-out'}">
+        <div class="product-img-wrap" onclick="openQuickView(${product.id})">
           <span class="product-badge">${product.categoryLabel}</span>
+          ${available ? '' : '<span class="sold-out-badge">Sold Out</span>'}
           <img src="${product.image}" alt="${product.name}" class="product-img" loading="lazy" />
+          <span class="quickview-hint">Quick View</span>
         </div>
         <div class="product-info">
           <h3 class="product-name">${product.name}</h3>
           <p class="product-price">${formatNaira(product.price)}</p>
-          ${variantControls}
+          ${buildVariantControls(product)}
           <div class="product-actions">
-            <button class="btn-card-bag" onclick="addToBag(${product.id})">Add to Bag</button>
-            <button type="button" class="btn-card-wa" onclick="orderDirectWhatsApp(${product.id})">
+            <button class="btn-card-bag" ${available ? '' : 'disabled'} onclick="addToBag(${product.id})">
+              ${available ? 'Add to Bag' : 'Sold Out'}
+            </button>
+            <button type="button" class="btn-card-wa" ${available ? '' : 'disabled'} onclick="orderDirectWhatsApp(${product.id})">
               Order on WhatsApp
             </button>
           </div>
@@ -220,11 +324,11 @@ function renderProducts(filterCategory = 'all') {
   }).join('');
 }
 
-function addToBag(productId) {
+function addToBag(productId, prefix = '') {
   const product = products.find(p => p.id === productId);
-  if (!product) return;
+  if (!product || product.inStock === false) return;
 
-  const variant = getSelectedVariantText(productId);
+  const variant = getSelectedVariantText(productId, prefix);
   const cartKey = `${product.id}-${variant}`;
 
   const existing = cart.find(item => item.cartKey === cartKey);
@@ -234,6 +338,7 @@ function addToBag(productId) {
     cart.push({ ...product, variant, cartKey, qty: 1 });
   }
 
+  quickViewModal.classList.remove('open');
   updateBagUI();
   openBag();
 }
@@ -298,12 +403,17 @@ function openBag() {
 function closeAllModals() {
   bagDrawer.classList.remove('open');
   checkoutModal.classList.remove('open');
+  quickViewModal.classList.remove('open');
   overlay.classList.remove('active');
 }
 
 openBagBtn.addEventListener('click', openBag);
 closeBagBtn.addEventListener('click', closeAllModals);
 overlay.addEventListener('click', closeAllModals);
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') closeAllModals();
+});
 
 proceedCheckoutBtn.addEventListener('click', () => {
   bagDrawer.classList.remove('open');
@@ -348,11 +458,25 @@ checkoutForm.addEventListener('submit', (e) => {
   window.open(waUrl, '_blank', 'noopener');
 });
 
+searchInput.addEventListener('input', (e) => {
+  searchQuery = e.target.value;
+  clearSearchBtn.classList.toggle('visible', searchQuery.length > 0);
+  renderProducts();
+});
+
+clearSearchBtn.addEventListener('click', () => {
+  searchQuery = '';
+  searchInput.value = '';
+  clearSearchBtn.classList.remove('visible');
+  renderProducts();
+});
+
 filterBtns.forEach(btn => {
   btn.addEventListener('click', () => {
     filterBtns.forEach(b => b.classList.remove('active'));
     btn.classList.add('active');
-    renderProducts(btn.dataset.category);
+    activeCategory = btn.dataset.category;
+    renderProducts();
   });
 });
 
