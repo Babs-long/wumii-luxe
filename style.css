@@ -969,3 +969,121 @@ body {
     grid-template-columns: 1fr;
   }
 }
+.policies-page {
+  padding: 5rem 0;
+  background-color: var(--bg-charcoal);
+}
+
+.policies-header {
+  text-align: center;
+  max-width: 640px;
+  margin: 0 auto 3.5rem;
+}
+
+.policies-intro {
+  color: var(--text-muted);
+  margin-top: 0.75rem;
+  font-size: 0.98rem;
+}
+
+.policies-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.policy-card {
+  background-color: var(--bg-obsidian);
+  border: 1px solid var(--gold-border);
+  border-radius: 12px;
+  padding: 2.2rem;
+  scroll-margin-top: 100px;
+}
+
+.policy-tag {
+  display: inline-block;
+  font-size: 0.72rem;
+  letter-spacing: 2.5px;
+  color: var(--gold-primary);
+  margin-bottom: 0.5rem;
+}
+
+.policy-card h2 {
+  font-family: var(--font-serif);
+  color: var(--text-light);
+  font-size: 1.5rem;
+  margin-bottom: 1.2rem;
+}
+
+.policy-card ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+}
+
+.policy-card li {
+  color: var(--text-muted);
+  font-size: 0.95rem;
+  padding-left: 1.25rem;
+  position: relative;
+}
+
+.policy-card li::before {
+  content: '◆';
+  position: absolute;
+  left: 0;
+  color: var(--gold-primary);
+  font-size: 0.7rem;
+  top: 0.25rem;
+}
+
+.policy-card strong {
+  color: var(--gold-light);
+}
+
+.policies-cta {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 3rem;
+}
+
+@media (max-width: 680px) {
+  .policy-card {
+    padding: 1.5rem;
+  }
+}
+.product-variants {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 0.85rem;
+}
+
+.variant-select {
+  flex: 1;
+  min-width: 0;
+  background-color: var(--bg-obsidian);
+  color: var(--text-light);
+  border: 1px solid var(--gold-border);
+  border-radius: 5px;
+  padding: 0.42rem 0.5rem;
+  font-family: var(--font-sans);
+  font-size: 0.78rem;
+  cursor: pointer;
+  transition: border-color 0.2s ease;
+}
+
+.variant-select:focus {
+  outline: none;
+  border-color: var(--gold-primary);
+}
+
+.bag-item-variant {
+  font-size: 0.76rem;
+  color: var(--text-muted);
+  margin-top: 0.15rem;
+}

@@ -13,7 +13,8 @@ const products = [
     category: 'bags',
     categoryLabel: 'Bags',
     price: 10000,
-    image: '/assets/images/Short Bags.jpg'
+    colors: ['Black', 'Cream', 'Brown'],
+    image: './assets/images/Short Bags.jpg'
   },
   {
     id: 2,
@@ -21,7 +22,8 @@ const products = [
     category: 'bags',
     categoryLabel: 'Bags',
     price: 7000,
-    image: '/assets/images/Tote Bag.jpg'
+    colors: ['Black', 'Tan', 'Cream'],
+    image: './assets/images/Tote Bag.jpg'
   },
   {
     id: 3,
@@ -29,7 +31,8 @@ const products = [
     category: 'bags',
     categoryLabel: 'Bags',
     price: 11000,
-    image: '/assets/images/Small Bag.jpg'
+    colors: ['Black', 'White', 'Nude'],
+    image: './assets/images/Small Bag.jpg'
   },
   {
     id: 4,
@@ -37,7 +40,9 @@ const products = [
     category: 'shoes',
     categoryLabel: 'Shoes & Heels',
     price: 11000,
-    image: '/assets/images/Hills.jpg'
+    sizes: ['37', '38', '39', '40', '41', '42'],
+    colors: ['Black', 'Nude', 'Gold'],
+    image: './assets/images/Hills.jpg'
   },
   {
     id: 5,
@@ -45,7 +50,9 @@ const products = [
     category: 'wears',
     categoryLabel: 'Wears',
     price: 7000,
-    image: '/assets/images/Basic Top.jpg'
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['Black', 'White', 'Beige'],
+    image: './assets/images/Basic Top.jpg'
   },
   {
     id: 6,
@@ -53,7 +60,9 @@ const products = [
     category: 'shoes',
     categoryLabel: 'Shoes & Heels',
     price: 7500,
-    image: '/assets/images/Slide.jpg'
+    sizes: ['37', '38', '39', '40', '41', '42'],
+    colors: ['Black', 'Brown', 'White'],
+    image: './assets/images/Slide.jpg'
   },
   {
     id: 7,
@@ -61,7 +70,9 @@ const products = [
     category: 'shoes',
     categoryLabel: 'Shoes & Heels',
     price: 16500,
-    image: '/assets/images/Chewgum Slippers.jpg'
+    sizes: ['37', '38', '39', '40', '41', '42'],
+    colors: ['Black', 'Nude', 'Brown'],
+    image: './assets/images/Chewgum Slippers.jpg'
   },
   {
     id: 8,
@@ -69,31 +80,38 @@ const products = [
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
     price: 7000,
-    image: '/assets/images/Hijab.jpg'
+    colors: ['Black', 'Nude', 'Cream', 'Dusty Rose'],
+    image: './assets/images/Hijab.jpg'
   },
   {
-    id: 8,
+    id: 9,
     name: 'Luxury Jalamia',
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
     price: 15000,
-    image: '/assets/images/Jalamia.jpg'
+    sizes: ['M', 'L', 'XL', 'XXL'],
+    colors: ['Black', 'Navy Blue', 'Olive'],
+    image: './assets/images/Jalamia.jpg'
   },
   {
-    id: 8,
+    id: 10,
     name: 'Women Jalamia',
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
     price: 15000,
-    image: '/assets/images/Ladies Jalamia.jpg'
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['Black', 'Brown', 'Champagne'],
+    image: './assets/images/Ladies Jalamia.jpg'
   },
   {
-    id: 8,
+    id: 11,
     name: 'Luxury Abaya',
     category: 'islamic',
     categoryLabel: 'Islamic Wears',
     price: 35000,
-    image: '/assets/images/Abaya.jpg'
+    sizes: ['S', 'M', 'L', 'XL'],
+    colors: ['Black', 'Emerald', 'Champagne'],
+    image: './assets/images/Abaya.jpg'
   }
 ];
 
@@ -125,8 +143,35 @@ menuToggle.addEventListener('click', () => {
   navLinks.classList.toggle('open');
 });
 
+document.querySelectorAll('.nav-links a').forEach(link => {
+  link.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+  });
+});
+
 function formatNaira(amount) {
   return '₦' + amount.toLocaleString('en-NG');
+}
+
+function getSelectedVariantText(productId) {
+  const sizeEl = document.getElementById(`size-${productId}`);
+  const colorEl = document.getElementById(`color-${productId}`);
+  const parts = [];
+  if (sizeEl) parts.push(`Size: ${sizeEl.value}`);
+  if (colorEl) parts.push(`Color: ${colorEl.value}`);
+  return parts.join(', ');
+}
+
+function orderDirectWhatsApp(productId) {
+  const product = products.find(p => p.id === productId);
+  if (!product) return;
+
+  const variantText = getSelectedVariantText(productId);
+  const variantLabel = variantText ? ` [${variantText}]` : '';
+  const waText = encodeURIComponent(
+    `Hello Wumii Luxe! I would like to order:\n• ${product.name}${variantLabel} (${formatNaira(product.price)})`
+  );
+  window.open(`https://wa.me/${WHATSAPP_NUMBER}?text=${waText}`, '_blank', 'noopener');
 }
 
 function renderProducts(filterCategory = 'all') {
@@ -135,9 +180,23 @@ function renderProducts(filterCategory = 'all') {
     : products.filter(item => item.category === filterCategory);
 
   productGrid.innerHTML = filtered.map(product => {
-    const waText = encodeURIComponent(
-      `Hello Wumii Luxe! I would like to order:\n• ${product.name} (${formatNaira(product.price)})`
-    );
+    const hasSizes = Array.isArray(product.sizes) && product.sizes.length > 0;
+    const hasColors = Array.isArray(product.colors) && product.colors.length > 0;
+
+    const variantControls = (hasSizes || hasColors)
+      ? `<div class="product-variants">
+          ${hasSizes ? `
+            <select id="size-${product.id}" class="variant-select" aria-label="Select Size">
+              ${product.sizes.map(s => `<option value="${s}">Size: ${s}</option>`).join('')}
+            </select>
+          ` : ''}
+          ${hasColors ? `
+            <select id="color-${product.id}" class="variant-select" aria-label="Select Color">
+              ${product.colors.map(c => `<option value="${c}">${c}</option>`).join('')}
+            </select>
+          ` : ''}
+        </div>`
+      : '';
 
     return `
       <div class="product-card">
@@ -148,11 +207,12 @@ function renderProducts(filterCategory = 'all') {
         <div class="product-info">
           <h3 class="product-name">${product.name}</h3>
           <p class="product-price">${formatNaira(product.price)}</p>
+          ${variantControls}
           <div class="product-actions">
             <button class="btn-card-bag" onclick="addToBag(${product.id})">Add to Bag</button>
-            <a href="https://wa.me/${WHATSAPP_NUMBER}?text=${waText}" target="_blank" rel="noopener" class="btn-card-wa">
+            <button type="button" class="btn-card-wa" onclick="orderDirectWhatsApp(${product.id})">
               Order on WhatsApp
-            </a>
+            </button>
           </div>
         </div>
       </div>
@@ -164,30 +224,33 @@ function addToBag(productId) {
   const product = products.find(p => p.id === productId);
   if (!product) return;
 
-  const existing = cart.find(item => item.id === productId);
+  const variant = getSelectedVariantText(productId);
+  const cartKey = `${product.id}-${variant}`;
+
+  const existing = cart.find(item => item.cartKey === cartKey);
   if (existing) {
     existing.qty += 1;
   } else {
-    cart.push({ ...product, qty: 1 });
+    cart.push({ ...product, variant, cartKey, qty: 1 });
   }
 
   updateBagUI();
   openBag();
 }
 
-function changeQty(productId, delta) {
-  const item = cart.find(i => i.id === productId);
+function changeQty(cartKey, delta) {
+  const item = cart.find(i => i.cartKey === cartKey);
   if (!item) return;
 
   item.qty += delta;
   if (item.qty <= 0) {
-    cart = cart.filter(i => i.id !== productId);
+    cart = cart.filter(i => i.cartKey !== cartKey);
   }
   updateBagUI();
 }
 
-function removeFromBag(productId) {
-  cart = cart.filter(i => i.id !== productId);
+function removeFromBag(cartKey) {
+  cart = cart.filter(i => i.cartKey !== cartKey);
   updateBagUI();
 }
 
@@ -214,12 +277,13 @@ function updateBagUI() {
       <img src="${item.image}" alt="${item.name}" />
       <div class="bag-item-details">
         <div class="bag-item-title">${item.name}</div>
+        ${item.variant ? `<div class="bag-item-variant">${item.variant}</div>` : ''}
         <div class="bag-item-price">${formatNaira(item.price * item.qty)}</div>
         <div class="qty-controls">
-          <button class="qty-btn" onclick="changeQty(${item.id}, -1)">-</button>
+          <button class="qty-btn" onclick="changeQty('${item.cartKey}', -1)">-</button>
           <span>${item.qty}</span>
-          <button class="qty-btn" onclick="changeQty(${item.id}, 1)">+</button>
-          <button class="remove-item-btn" onclick="removeFromBag(${item.id})">Remove</button>
+          <button class="qty-btn" onclick="changeQty('${item.cartKey}', 1)">+</button>
+          <button class="remove-item-btn" onclick="removeFromBag('${item.cartKey}')">Remove</button>
         </div>
       </div>
     </div>
@@ -264,7 +328,10 @@ checkoutForm.addEventListener('submit', (e) => {
   const address = document.getElementById('custAddress').value.trim();
 
   const itemsList = cart
-    .map(item => `• ${item.name} (x${item.qty}) - ${formatNaira(item.price * item.qty)}`)
+    .map(item => {
+      const variantLabel = item.variant ? ` [${item.variant}]` : '';
+      return `• ${item.name}${variantLabel} (x${item.qty}) - ${formatNaira(item.price * item.qty)}`;
+    })
     .join('\n');
 
   const message =
@@ -291,9 +358,3 @@ filterBtns.forEach(btn => {
 
 renderProducts();
 updateBagUI();
-
-document.querySelectorAll('.nav-links a').forEach(link => {
-  link.addEventListener('click', () => {
-    navLinks.classList.remove('open');
-  });
-});
